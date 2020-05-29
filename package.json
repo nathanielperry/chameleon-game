@@ -1,6 +1,6 @@
 {
 	"name": "chameleon",
-	"version": "0.1.0",
+	"version": "0.3.0",
 	"description": "A template project for Phaser3 using Parceljs",
 	"scripts": {
 		"start": "parcel src/index.html -p 8000",
