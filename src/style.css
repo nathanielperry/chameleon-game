@@ -1,0 +1,9 @@
+#game {
+    position: relative;
+}
+
+#color-text-box {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
