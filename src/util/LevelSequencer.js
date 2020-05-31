@@ -36,7 +36,6 @@ export default class LevelSequencer {
     }
     
     _waitFor(res, eventName) {
-        console.log('waiting for:', eventName);
         this.scene.events.on(eventName, () => {
             res();
         });
@@ -47,10 +46,8 @@ export default class LevelSequencer {
         res();
     }
 
-    _event(res, eventName, data) {
-        console.log(eventName);
-        this.scene.events.emit(eventName, data);
-        res();
+    _event(res, eventFn) {
+        eventFn(res, this.scene);
     }
 
     _scroll(res, args) {

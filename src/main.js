@@ -17,9 +17,9 @@ const config = {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 200 },
-			debug: true,
-			debugShowBody: true,
-			debugBodyColor: 0x00ff00,
+			// debug: true,
+			// debugShowBody: true,
+			// debugBodyColor: 0x00ff00,
 		}
 	},
 	scene: [GameScene]

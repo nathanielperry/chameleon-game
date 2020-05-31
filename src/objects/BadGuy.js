@@ -5,7 +5,7 @@ import StateMachine from '../util/StateMachine';
 
 export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
-        super(scene, 120, 1280, 'idle', 0);
+        super(scene, -120, 1280, 'idle', 0);
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         this.setCollideWorldBounds();
@@ -20,7 +20,7 @@ export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
 
         //Behaviour
         this.stateMachine = new StateMachine(this);
-        this.stateMachine.setState(this.walk, 1);
+        this.stateMachine.setState(this.idle, 1);
 
         //Animations
         scene.anims.create({
@@ -70,14 +70,19 @@ export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
         this.switchAnimation('badguy-idle');
         this.changeFacing(dir);
         
-        // if (this.body.collideWorldBounds) {
-        //     this.setVelocityX(4);
-        //     this.setVelocityY(-4);
-        // }
+        //No idea why I need +65 here but HEY
+        if (this.y + 65 >= this.scene.bg.height) {
+            //TODO: Play 'boink' sound here.
+            this.setVelocityX(20 * dir);
+            this.setVelocityY(-40);
+        }
     }
     
     idle(facing) {
         this.changeFacing(facing);
-        this.switchAnimation('idle');
+        this.switchAnimation('badguy-idle');
+
+        this.setVelocityX(0);
+        this.setVelocityY(0);
     }
 }

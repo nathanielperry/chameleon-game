@@ -26,20 +26,20 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
 
         //Animations
         scene.anims.create({
-            key: 'walk',
+            key: 'chameleon-walk',
             frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 0, end: 3 }),
             frameRate: 3,
             repeat: -1,
         });
         scene.anims.create({
-            key: 'run',
+            key: 'chameleon-run',
             frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 8, end: 11 }),
             frameRate: 5,
             repeat: -1,
         });
 
         scene.anims.create({
-            key: 'idle',
+            key: 'chameleon-idle',
             frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 4, end: 5 }),
             frameRate: 2,
             repeat: -1,
@@ -47,13 +47,13 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
 
         //Poses
         scene.anims.create({
-            key: 'wall-hug',
+            key: 'chameleon-wall-hug',
             frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 6, end: 6}),
             frameRate: 2,
             repeat: -1,
         });
         scene.anims.create({
-            key: 't-pose',
+            key: 'chameleon-t-pose',
             frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 7, end: 7}),
             frameRate: 2,
             repeat: -1,
@@ -94,19 +94,19 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
     //States
     walk(dir) {
         this.facing = dir || this.facing;
-        this.switchAnimation('walk');
+        this.switchAnimation('chameleon-walk');
         this.facing === 1 ? this.flipX = false : this.flipX = true;
         this.x += 1 * this.facing;
     }
     
     idle(facing) {
-        this.switchAnimation('idle');
+        this.switchAnimation('chameleon-idle');
     }
 
     pose(poseName) {
         const poses = [
-            'wall-hug',
-            't-pose',
+            'chameleon-wall-hug',
+            'chameleon-t-pose',
         ]
 
         this.switchAnimation(poseName || poses[_.random(poses.length - 1)]);

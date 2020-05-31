@@ -11,7 +11,7 @@ import VisibilityMeter from '../objects/VisibilityMeter';
 
 import LevelSequencer from '../util/LevelSequencer';
 import colorData from '../lib/colors';
-import levelSequence from '../lib/levelSequence';
+import sequence from '../lib/sequence';
 
 export default class GameScene extends Phaser.Scene
 {
@@ -35,7 +35,7 @@ export default class GameScene extends Phaser.Scene
         const scene = this;
         const cam = this.cameras.main;
 
-        this.sequencer = new LevelSequencer(scene, levelSequence);
+        this.sequencer = new LevelSequencer(scene, sequence);
 
         //background, camera, and world
         this.bg = new Background(scene);
@@ -62,19 +62,6 @@ export default class GameScene extends Phaser.Scene
             });
 
             this.player.setColor(color.hex);
-        });
-
-        //Events
-        this.events.on('tutorial', () => {
-            this.text.writeToTextInput('Type color, hit enter', 3000);
-            this.text.input.focus();
-
-            this.events.once('hidden', () => this.events.emit('tutorial-complete'));
-        });
-
-        this.events.on('bad-guy-1', () => {
-            this.text.writeToTextInput('Type color, hit enter', 3000);
-            this.text.input.focus();
         });
 
         this.sequencer.go();
