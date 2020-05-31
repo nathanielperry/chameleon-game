@@ -1,9 +1,16 @@
+body {
+    background: #161616;
+    margin: 0;
+}
+
 #game {
-    position: relative;
+    max-width: 900px;
 }
 
 #color-text-box {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+    width: 100%;
+    font-size: 2rem;
+    padding: 8px 0 8px 10px;
+    font-family: 'Press Start 2P';
+    height: 40px;
 }

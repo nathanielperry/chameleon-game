@@ -1,13 +1,13 @@
 {
 	"name": "chameleon",
 	"version": "0.3.0",
-	"description": "A template project for Phaser3 using Parceljs",
+	"description": "A game about a Chameleon.",
 	"scripts": {
 		"start": "parcel src/index.html -p 8000",
 		"build": "parcel build src/index.html --out-dir dist",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "supertommy",
+	"author": "Nathaniel Perry",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
@@ -15,6 +15,7 @@
 	},
 	"homepage": "https://github.com/ourcade/phaser3-parcel-template",
 	"devDependencies": {
+		"@azerion/phaser-input": "^2.0.5",
 		"eslint": "^6.8.0",
 		"minimist": ">=1.2.2",
 		"parcel-plugin-clean-easy": "^1.0.2",

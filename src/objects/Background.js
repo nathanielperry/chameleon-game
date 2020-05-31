@@ -11,10 +11,6 @@ export default class Chamelon extends Phaser.GameObjects.Image {
         scene.load.image('background', 'background.png');
     }
 
-    update() {
-        this.setPosition(this.x - 1, this.y);
-    }
-
     getHexColorOfPixelAt(x, y) {
         const pixel = this.scene.textures.getPixel(x - this.x, y, 'background') || { r: 0, g: 0, b: 0 };
         return rgbToHex(pixel.r, pixel.g, pixel.b);

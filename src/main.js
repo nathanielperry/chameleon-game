@@ -3,6 +3,7 @@ import GameScene from './scenes/GameScene'
 
 const config = {
 	type: Phaser.AUTO,
+	parent: 'game',
 	width: 320,
 	height: 160,
 	scale: {
@@ -20,4 +21,6 @@ const config = {
 	scene: [GameScene]
 }
 
-export default new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+export default game;

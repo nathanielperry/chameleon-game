@@ -4,9 +4,12 @@ import Phaser from 'phaser';
 import Chameleon from '../objects/Chameleon';
 import Background from '../objects/Background';
 import TextBox from '../objects/TextBox';
+import TextInput from '../objects/TextInput';
 import VisibilityMeter from '../objects/VisibilityMeter';
 
+import LevelSequencer from '../util/LevelSequencer';
 import colorData from '../lib/colors';
+import levelSequence from '../lib/levelSequence';
 
 export default class GameScene extends Phaser.Scene
 {
@@ -15,8 +18,10 @@ export default class GameScene extends Phaser.Scene
 	}
 
 	preload() {
-        Chameleon.load(this);
-        Background.load(this);
+        const scene = this;
+
+        Chameleon.load(scene);
+        Background.load(scene);
         const colorListElem = document.querySelector('#color-list');
         colorData.forEach((color) => {
             addColorData(color.name, colorListElem);
@@ -25,12 +30,23 @@ export default class GameScene extends Phaser.Scene
 
     create() {
         const scene = this;
+        const cam = this.cameras.main;
 
-        this.background = new Background(scene);
-        this.player = new Chameleon(scene);
-        this.textBox = new TextBox(scene);
+        this.sequencer = new LevelSequencer(scene, levelSequence);
+
+        //background, camera, and world
+        this.bg = new Background(scene);
+        //Not sure why we need to raise it 32 pixels here
+        this.physics.world.setBounds(0, 0, this.bg.width, this.bg.height-32);
+        cam.setBounds(0, 0, this.bg.width, this.bg.height);
+        cam.scrollX = 0;
+        cam.scrollY = this.bg.height - 160;
+
+        //UI
         this.visibilityMeter = new VisibilityMeter(scene, 10, 10);
+        this.text = new TextInput(scene);
 
+        this.player = new Chameleon(scene);
         this.player.setColor('#ac3232');
 
         //On color-change event, change color of chameleon
@@ -41,15 +57,21 @@ export default class GameScene extends Phaser.Scene
 
             this.player.setColor(color.hex);
         });
+
+        this.events.on('tutorial', () => {
+            setTimeout(() => this.events.emit('tutorial-complete'), 3000);
+        });
+
+        this.sequencer.go();
     }
 
     update() {
-        this.background.update();
         this.visibilityMeter.fillBarTo(this.getChameleonVisibility());
+        this.player.update();
     }
 
     getColorBehindChameleon() {
-        return this.background.getHexColorOfPixelAt(
+        return this.bg.getHexColorOfPixelAt(
             this.player.getCenter().x,
             this.player.getCenter().y,
         );
