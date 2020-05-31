@@ -22,4 +22,13 @@ export default class TextInput {
     getValue() {
         return this.input.value;
     }
+
+    writeToTextInput(message, duration) {
+        let i = 0;
+        const interval = setInterval(() => {
+            this.input.setAttribute('placeholder', message.slice(0, i));
+            i++;
+            if (i > message.length) clearInterval(interval);
+        }, duration / message.length);
+    }
 }

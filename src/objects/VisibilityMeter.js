@@ -12,6 +12,9 @@ export default class VisibilityMeter extends Phaser.GameObjects.Container {
 
         this.bar.setOrigin(0, 0);
         this.visibilityBar.setOrigin(0, 0);
+        this.percentage = 0;
+        this.targetWidth = 0;
+        this.hidden = false;
         
         this.add(this.bar);
         this.add(this.visibilityBar);
@@ -21,6 +24,30 @@ export default class VisibilityMeter extends Phaser.GameObjects.Container {
     }
 
     fillBarTo(percentage) {
-        this.visibilityBar.width = percentage * (this.width / 100);
+        this.percentage = percentage;
+        this.targetWidth = percentage * (this.width / 100);
+    }
+
+    update(delta) {
+        this.visibilityBar.width = Phaser.Math.Interpolation.Linear(
+            [this.visibilityBar.width, this.targetWidth],
+            0.1
+        );
+
+        if (this.percentage <= 10) {
+            this.visibilityBar.fillColor = 0x6abe30;
+            if(!this.hidden) {
+                this.hidden = true;
+                this.scene.events.emit('hidden');
+            }
+        } else if (this.percentage < 50) {
+            this.visibilityBar.fillColor = 0xe17e3b;
+        } else {
+            this.visibilityBar.fillColor = 0xac3232;
+        }
+
+        if (this.percentage > 10) {
+            this.hidden = false;
+        }
     }
 }

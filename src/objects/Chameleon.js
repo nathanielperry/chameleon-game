@@ -5,13 +5,19 @@ import StateMachine from '../util/StateMachine';
 
 export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
-        super(scene, 50, 1280-64, 'idle', 0);
+        super(scene, -64, 1280, 'idle', 0);
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         this.setCollideWorldBounds();
+
+        this.height = 64;
+        this.width = 64;
+
+        this.body.setSize(this.width, this.height);
         
         //Properties
         this.skinColor = 0xffffff;
+        this.targetSkinColor = 0xffffff;
         this.facing = 1;
 
         //Behaviour

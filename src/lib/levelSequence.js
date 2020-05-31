@@ -8,7 +8,7 @@ const levelSequence = [
     //Chameleon Enters Frame
     {
         checkpoint: 'start',
-        wait: 1250,
+        wait: 3000,
     },
     //Chameleon stops at bush - start tutorial
     {
@@ -16,10 +16,16 @@ const levelSequence = [
         event: 'tutorial',
         waitFor: 'tutorial-complete',
     },
+    //Idle for a moment
+    {
+        wait: 2000,
+    },
     //Camera pans up, and something strolls by, stopping just behind the bush.
     {
         wait: 4000,
         scroll: [0, -50, 1000],
+        event: 'bag-guy-1',
+        waitFor: 'bag-guy-1-complete',
     },
     //The camera pans down, showing the chameleon wall-hugging the bush
     {

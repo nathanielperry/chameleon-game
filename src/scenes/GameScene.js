@@ -2,6 +2,8 @@ import _ from 'underscore';
 
 import Phaser from 'phaser';
 import Chameleon from '../objects/Chameleon';
+import BadGuy from '../objects/BadGuy';
+
 import Background from '../objects/Background';
 import TextBox from '../objects/TextBox';
 import TextInput from '../objects/TextInput';
@@ -21,6 +23,7 @@ export default class GameScene extends Phaser.Scene
         const scene = this;
 
         Chameleon.load(scene);
+        BadGuy.load(scene);
         Background.load(scene);
         const colorListElem = document.querySelector('#color-list');
         colorData.forEach((color) => {
@@ -37,17 +40,20 @@ export default class GameScene extends Phaser.Scene
         //background, camera, and world
         this.bg = new Background(scene);
         //Not sure why we need to raise it 32 pixels here
-        this.physics.world.setBounds(0, 0, this.bg.width, this.bg.height-32);
-        cam.setBounds(0, 0, this.bg.width, this.bg.height);
-        cam.scrollX = 0;
+        this.physics.world.setBounds(0, 0, this.bg.width, this.bg.height);
+        // cam.setBounds(0, 0, this.bg.width, this.bg.height);
+        cam.scrollX = 64;
         cam.scrollY = this.bg.height - 160;
 
         //UI
         this.visibilityMeter = new VisibilityMeter(scene, 10, 10);
         this.text = new TextInput(scene);
 
+        //Actors
         this.player = new Chameleon(scene);
         this.player.setColor('#ac3232');
+
+        this.badguy = new BadGuy(scene);
 
         //On color-change event, change color of chameleon
         this.events.on('color-change', (colorName) => {
@@ -58,8 +64,17 @@ export default class GameScene extends Phaser.Scene
             this.player.setColor(color.hex);
         });
 
+        //Events
         this.events.on('tutorial', () => {
-            setTimeout(() => this.events.emit('tutorial-complete'), 3000);
+            this.text.writeToTextInput('Type color, hit enter', 3000);
+            this.text.input.focus();
+
+            this.events.once('hidden', () => this.events.emit('tutorial-complete'));
+        });
+
+        this.events.on('bad-guy-1', () => {
+            this.text.writeToTextInput('Type color, hit enter', 3000);
+            this.text.input.focus();
         });
 
         this.sequencer.go();
@@ -68,6 +83,8 @@ export default class GameScene extends Phaser.Scene
     update() {
         this.visibilityMeter.fillBarTo(this.getChameleonVisibility());
         this.player.update();
+        this.badguy.update();
+        this.visibilityMeter.update();
     }
 
     getColorBehindChameleon() {
