@@ -3,6 +3,7 @@ export default class LevelSequencer {
         this.steps = steps;
         this.scene = scene;
         this.currentStep = 0;
+        this.stopped = false;
     }
 
     _runStep(i) {
@@ -14,14 +15,13 @@ export default class LevelSequencer {
                 return this['_' + fn](resolve, args);
             }) 
         });
-
         return Promise.all(events);
     }
     
     go(step = 0) {
         this.currentStep = step;
-
         this._runStep(step).then((res) => {
+            if (this.stopped) return;
             const nextStep = step + 1;
             if (nextStep < this.steps.length) {
                 this.go(step + 1);
@@ -29,9 +29,16 @@ export default class LevelSequencer {
         });
     }
 
+    restart() {
+        this.stopped = false;
+    }
+
+    _stop() {
+        this.stopped = true;
+    }
+
     //events
     _wait(res, duration) {
-        console.log('waiting:', duration)
         setTimeout(() => res(), duration);
     }
     
@@ -42,7 +49,7 @@ export default class LevelSequencer {
     }
     
     _checkpoint(res, checkpointName) {
-        //TODO: Save state here
+        this.scene.saveState(checkpointName);
         res();
     }
 
@@ -66,5 +73,21 @@ export default class LevelSequencer {
         const [ actor, action, actionArgs ] = args;
         this.scene.events.emit(`${actor}-act`, { action, actionArgs });
         res();
+    }
+
+    _detectionCheck(res, args) {
+        const duration = args;
+        const detectInterval = setInterval(() => {
+            if (this.scene.getChameleonVisibility() > 10) {
+                clearInterval(detectInterval);
+                this.scene.gameOver();
+                this._stop();
+            }
+        }, 10);
+
+        setTimeout(() => {
+            clearInterval(detectInterval);
+            res();
+        }, duration);
     }
 }

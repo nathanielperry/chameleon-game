@@ -40,13 +40,13 @@ export default class VisibilityMeter extends Phaser.GameObjects.Container {
                 this.hidden = true;
                 this.scene.events.emit('hidden');
             }
-        } else if (this.percentage < 50) {
+        } else if (this.percentage < 30) {
             this.visibilityBar.fillColor = 0xe17e3b;
         } else {
             this.visibilityBar.fillColor = 0xac3232;
         }
 
-        if (this.percentage > 10) {
+        if (this.percentage > 20) {
             this.hidden = false;
         }
     }

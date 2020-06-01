@@ -28,7 +28,7 @@ export default class TextInput {
         const interval = setInterval(() => {
             this.input.setAttribute('placeholder', message.slice(0, i));
             i++;
-            if (i > message.length) clearInterval(interval);
+        if (i > message.length) clearInterval(interval);
         }, duration / message.length);
     }
 }

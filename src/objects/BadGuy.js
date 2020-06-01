@@ -5,7 +5,7 @@ import StateMachine from '../util/StateMachine';
 
 export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
-        super(scene, -120, 1280, 'idle', 0);
+        super(scene, 120, 1280, 'idle', 0);
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         this.setCollideWorldBounds();
@@ -32,7 +32,7 @@ export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
 
         //Poses
         scene.anims.create({
-            key: 'bad-buy-bug-eyed',
+            key: 'badguy-bug-eyed',
             frames: scene.anims.generateFrameNumbers('badguy-spritesheet', { start: 1, end: 1}),
             frameRate: 2,
             repeat: -1,
@@ -61,8 +61,7 @@ export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
     }
 
     changeFacing(dir) {
-        this.facing = dir || this.facing;
-        this.facing === 1 ? this.flipX = false : this.flipX = true;
+        dir === 1 ? this.flipX = false : this.flipX = true;
     }
 
     //States
@@ -70,11 +69,24 @@ export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
         this.switchAnimation('badguy-idle');
         this.changeFacing(dir);
         
-        //No idea why I need +65 here but HEY
-        if (this.y + 65 >= this.scene.bg.height) {
+        //No idea why I need +82 here but HEY
+        if (this.y + 82 >= this.scene.bg.height) {
             //TODO: Play 'boink' sound here.
+            this.scene.sound.play('boing');
             this.setVelocityX(20 * dir);
             this.setVelocityY(-40);
+        }
+    }
+
+    run(dir) {
+        this.switchAnimation('badguy-bug-eyed');
+        this.changeFacing(dir);
+        
+        //No idea why I need +82 here but HEY
+        if (this.y + 82 >= this.scene.bg.height) {
+            this.scene.sound.play('boing');
+            this.setVelocityX(175 * dir);
+            this.setVelocityY(-50);
         }
     }
     
@@ -84,5 +96,9 @@ export default class BadGuy extends Phaser.Physics.Arcade.Sprite {
 
         this.setVelocityX(0);
         this.setVelocityY(0);
+    }
+
+    pose(poseName) {
+        this.switchAnimation(`badguy-${poseName}`);
     }
 }

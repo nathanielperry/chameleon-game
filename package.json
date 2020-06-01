@@ -16,6 +16,7 @@
 	"homepage": "https://github.com/ourcade/phaser3-parcel-template",
 	"devDependencies": {
 		"@azerion/phaser-input": "^2.0.5",
+		"cssnano": "^4.1.10",
 		"eslint": "^6.8.0",
 		"minimist": ">=1.2.2",
 		"parcel-plugin-clean-easy": "^1.0.2",

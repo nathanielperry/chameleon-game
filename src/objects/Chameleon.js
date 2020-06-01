@@ -1,3 +1,4 @@
+// @ts-nocheck
 import _ from 'underscore';
 
 import Phaser from 'phaser';
@@ -5,7 +6,7 @@ import StateMachine from '../util/StateMachine';
 
 export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
-        super(scene, -64, 1280, 'idle', 0);
+        super(scene, 0, 1280, 'idle', 0);
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         this.setCollideWorldBounds();
@@ -22,7 +23,6 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
 
         //Behaviour
         this.stateMachine = new StateMachine(this);
-        this.stateMachine.setState(this.walk, 1);
 
         //Animations
         scene.anims.create({
@@ -33,7 +33,7 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
         });
         scene.anims.create({
             key: 'chameleon-run',
-            frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 8, end: 11 }),
+            frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 10, end: 13 }),
             frameRate: 5,
             repeat: -1,
         });
@@ -54,7 +54,13 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
         });
         scene.anims.create({
             key: 'chameleon-t-pose',
-            frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 7, end: 7}),
+            frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 8, end: 8}),
+            frameRate: 2,
+            repeat: -1,
+        });
+        scene.anims.create({
+            key: 'chameleon-t-pose-down',
+            frames: scene.anims.generateFrameNumbers('chameleon-spritesheet', { start: 9, end: 9}),
             frameRate: 2,
             repeat: -1,
         });
@@ -78,7 +84,7 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
     setColor(hex) {
         const tint = parseInt(hex.slice(1), 16);
         this.setTint(tint);
-        this.skinColor = tint;
+        this.skinColor = '#' + tint.toString(16).padStart(6, '0');
     }
 
     getSkinColor() {
@@ -98,6 +104,13 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
         this.facing === 1 ? this.flipX = false : this.flipX = true;
         this.x += 1 * this.facing;
     }
+
+    run(dir) {
+        this.facing = dir || this.facing;
+        this.switchAnimation('chameleon-run');
+        this.facing === 1 ? this.flipX = false : this.flipX = true;
+        this.x += 2 * this.facing;
+    }
     
     idle(facing) {
         this.switchAnimation('chameleon-idle');
@@ -107,6 +120,7 @@ export default class Chameleon extends Phaser.Physics.Arcade.Sprite {
         const poses = [
             'chameleon-wall-hug',
             'chameleon-t-pose',
+            'chameleon-t-pose-down',
         ]
 
         this.switchAnimation(poseName || poses[_.random(poses.length - 1)]);
